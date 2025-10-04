@@ -1,6 +1,5 @@
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()  
+from hospital import db
+from datetime import datetime
 
 class User(db.Model):
     __tablename__ = 'users'
