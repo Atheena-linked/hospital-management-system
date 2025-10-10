@@ -6,4 +6,17 @@
     <title>{% block title %}My Website{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
+<body>
+    {% with messages =  get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messaages %}
+                <div>
+                    {{ message}}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {% block content %}
+    {% endblock content %}
+</body>
 </html>
