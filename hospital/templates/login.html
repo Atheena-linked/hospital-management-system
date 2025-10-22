@@ -2,6 +2,7 @@
 {%block content%}
     <div>
         <form method="POST" action="">
+            {{ form.hidden_tag() }}
             <fieldset>
                 <legend>Login</legend>
                 <div>
@@ -20,4 +21,4 @@
 
 {% endblock content %}
 
-<!-- already hv an acc -->
+

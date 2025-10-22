@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField, IntegerField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-
+from hospital.models import *
 
 class RegistrationForm(FlaskForm):
     name = StringField('Full Name', validators=[DataRequired(), Length(min=2, max=100)])
@@ -13,6 +13,11 @@ class RegistrationForm(FlaskForm):
                                      validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
     
+    def validate_username(self,username):
+
+        user = User.query.filter_by(username=username.data).first()
+        if user:
+            raise ValidationError('That username is taken ')
 
 class LoginForm(FlaskForm): 
     username = StringField('Username',
@@ -21,3 +26,19 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
+
+class AddDoctorForm(FlaskForm):
+    name = StringField('Full Name', validators=[DataRequired(), Length(min=2, max=100)])
+    username = StringField('Username',
+                           validators=[DataRequired(),
+                            Length(min=2,max=20)])
+    password = PasswordField('Password', validators=[DataRequired()])
+    specialization = StringField('Specialization', validators=[DataRequired(), Length(min=2, max=100)])
+    experience = IntegerField('Years of Experience', validators=[DataRequired()])
+    department = SelectField('Department', coerce=int, validators=[DataRequired()])
+    submit = SubmitField('Add Doctor')
+    def validate_username(self,username):
+
+        user = User.query.filter_by(username=username.data).first()
+        if user:
+            raise ValidationError('That username is taken ')

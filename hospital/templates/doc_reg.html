@@ -1,0 +1,46 @@
+{%extends "base.html"%}
+{%block content%}
+<div>
+    <form method="POST" action="">
+        {{ form.hidden_tag()}}
+        <fieldset>
+            <legend>Doctor Registration</legend>
+            <div>
+                {{ form.name.label()}}
+                {{ form.name()}}
+            </div>
+            
+            <div>
+                {{ form.username.label()}}
+                {{ form.username()}}
+
+            </div>
+            <div>
+                {{ form.password.label()}}
+                {{ form.password()}}
+            </div>
+            <div>
+                {{ form.specialization.label()}}
+                {{ form.specialization()}}
+            </div>
+            <div>
+                {{ form.experinece.label()}}
+                {{ form.experinece()}}
+            </div>
+
+            <div>
+                {{ form.department id.label()}}
+                {{ form.department_id()}}
+            </div>
+
+
+            <div>
+                {{ form.submit()}}
+
+            </div>
+        </form>
+
+
+        </fieldset>
+
+</div>

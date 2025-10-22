@@ -1,7 +1,8 @@
 from .forms import RegistrationForm,LoginForm
 from flask import render_template, url_for,flash,redirect
-from hospital import app
-
+from hospital import app,db,bcrypt
+from hospital.models import *
+from flask_login import login_user ,current_user,logout_user
 
 @app.route("/")
 @app.route("/home")
@@ -10,16 +11,76 @@ def home():
 
 @app.route("/register",methods=['GET','POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        flash(f'Account created for{form.username.data}!')
-        return redirect(url_for('home'))
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data,password_hash=hashed_password,role='patient')
+        db.session.add(user)
+        db.session.commit()
+        flash(f'Account created for{form.username.data}!You can now log in')
+        return redirect(url_for('login'))
     else:
         print(form.errors)
 
     return render_template('register.html',title='register',form=form)
 
-@app.route("/login")
+@app.route("/login",methods=['GET','POST'])
 def login():
+    if current_user.is_authenticated:
+        if current_user.role=='admin':
+            return redirect(url_for('admin'))
+        elif current_user.role=='doctor':
+            return redirect(url_for('doc'))
+        else:
+            return redirect(url_for('pat'))
     form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and bcrypt.check_password_hash(user.password_hash,form.password.data):
+            login_user(user)
+            if user.role=='admin':
+                return redirect(url_for('admin'))
+            elif user.role=='doctor':
+                return redirect(url_for('doc'))    
+            else:
+                return redirect(url_for('pat'))
+
+        else:
+            flash('Login Unsuccessful. Please check username and password')
+        
+
     return render_template('login.html',title='Login',form=form)
+
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
+
+@app.route("/admin")
+def admin():
+    return render_template('admin_dash.html')
+
+@app.route("/doctor")
+def doc():  
+    return render_template('doc_dash.html')
+
+@app.route("/patient")
+def pat():  
+    return render_template('pat_dash.html')
+
+@app.route("/add_doc",methods=['GET','POST'])
+def add_doc():
+    form = AddDoctorForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data,password_hash=hashed_password,role='doctor')
+
+        db.session.add(user)
+        db.session.commit()
+        doctor = Doctor(name=form.name.data,department_id=1,experience=0,specialization='General',user_id=user.id)
+        flash(f'Doctor Account created for {form.username.data}!')
+        return redirect(url_for('admin'))
+    return render_template('add_doc.html')

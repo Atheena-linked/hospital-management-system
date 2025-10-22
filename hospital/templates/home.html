@@ -2,7 +2,11 @@
 {%block content%}
 
 <h2>New User?</h2>
+{% if current_user.is_authenticated %}
+<h1><a href ="{{ url_for('logout') }}">LOG OUTTT</a></h1>
+
+{% else %}
 <h3><a href="{{ url_for('register') }}">Click to Register Now</a></h3>
 <h1><a href ="{{ url_for('login') }}">LOG IN</a></h1>
-
+{% endif %}
 {% endblock content %}
