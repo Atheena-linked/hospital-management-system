@@ -24,14 +24,18 @@
                 {{ form.specialization()}}
             </div>
             <div>
-                {{ form.experinece.label()}}
-                {{ form.experinece()}}
-            </div>
-
-            <div>
-                {{ form.department id.label()}}
+                {{ form.department_id.label()}}
                 {{ form.department_id()}}
             </div>
+            <div>
+                {{ form.experience.label()}}
+                {{ form.experience()}}
+            </div>
+
+            <!-- <div>
+                {{ form.department_id.label() }}
+                {{ form.department_id() }}
+            </div> -->
 
 
             <div>
@@ -44,3 +48,4 @@
         </fieldset>
 
 </div>
+{% endblock content %}

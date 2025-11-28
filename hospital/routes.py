@@ -1,8 +1,8 @@
-from .forms import RegistrationForm,LoginForm
+from .forms import RegistrationForm,LoginForm,AddDoctorForm
 from flask import render_template, url_for,flash,redirect
 from hospital import app,db,bcrypt
 from hospital.models import *
-from flask_login import login_user ,current_user,logout_user
+from flask_login import login_user ,current_user,logout_user,login_required
 
 @app.route("/")
 @app.route("/home")
@@ -72,15 +72,27 @@ def pat():
     return render_template('pat_dash.html')
 
 @app.route("/add_doc",methods=['GET','POST'])
+@login_required
+
 def add_doc():
+    if current_user.role != 'admin':
+        flash('you are not authorized to perform this action','danger')
+        return redirect(url_for('home'))
     form = AddDoctorForm()
+    # form.department_id.choices = [(d.id,d.name) for d in Department.query.all()]
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data,password_hash=hashed_password,role='doctor')
 
+        user = User(username=form.username.data,password_hash=hashed_password,role='doctor')
         db.session.add(user)
         db.session.commit()
-        doctor = Doctor(name=form.name.data,department_id=1,experience=0,specialization='General',user_id=user.id)
-        flash(f'Doctor Account created for {form.username.data}!')
+
+        doctor = Doctor(name=form.name.data,specialization=form.specialization.data,experience=form.experience.data,user_id=user.id,department_id=form.department_id.data)
+        db.session.add(doctor)
+        db.session.commit()
+
+        flash(f'Doctor {form.name.data} added successfully!')
         return redirect(url_for('admin'))
-    return render_template('add_doc.html')
+    else:
+        print(form.errors)
+    return render_template('doc_reg.html',form=form)
