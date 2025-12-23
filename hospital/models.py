@@ -34,7 +34,11 @@ class Patient(db.Model):
     __tablename__ = 'patients'
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(100),nullable=False)
-    user_id = db.Column(db.Integer,db.ForeignKey('users.id'),nullable=False)
+    user_id=db.Column(db.Integer,db.ForeignKey('users.id'),nullable=False)
+    age = db.Column(db.Integer,nullable=True)
+    gender = db.Column(db.String(10),nullable=True)
+    address = db.Column(db.String(150),nullable=True)
+    contact_number = db.Column(db.String(15),nullable=True)
     appointments = db.relationship('Appointment',backref='patient',lazy=True)
 class Appointment(db.Model):
     __tablename__ = 'appointments'

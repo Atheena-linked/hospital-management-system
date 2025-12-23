@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+
     <div>
         <form method = "POST" action = "">
             {{ form.hidden_tag() }}
@@ -29,6 +30,23 @@
                     {{ form.confirm.label() }}
                     {{ form.confirm() }}
                 </div>
+                <div>
+                    {{ form.gender.label() }}
+                    {{ form.gender() }}
+                </div>
+                <div>
+                    {{ form.age.label() }}
+                    {{ form.age() }}
+                </div>
+                <div>
+                    {{ form.address.label() }}
+                    {{ form.address() }}
+                </div>
+                <div>
+                    {{ form.contact_number.label() }}
+                    {{ form.contact_number() }}
+                </div>
+
             </fieldset>
             <div>
                 {{ form.submit()}}

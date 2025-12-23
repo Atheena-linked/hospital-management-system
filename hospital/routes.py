@@ -19,7 +19,11 @@ def register():
         user = User(username=form.username.data,password_hash=hashed_password,role='patient')
         db.session.add(user)
         db.session.commit()
-        flash(f'Account created for{form.username.data}!You can now log in')
+
+        patient = Patient(name=form.name.data,age=form.age.data,address=form.address.data,contact_number=form.contact_number.data,gender=form.gender.data,user_id=user.id) 
+        db.session.add(patient)
+        db.session.commit()
+        flash(f'Account created for {form.username.data}!You can now log in')
         return redirect(url_for('login'))
     else:
         print(form.errors)
@@ -61,7 +65,9 @@ def logout():
 
 @app.route("/admin")
 def admin():
-    return render_template('admin_dash.html')
+    d_count =  Doctor.query.count()
+    p_count = Patient.query.count()
+    return render_template('admin_dash.html',dcount = d_count,pcount=p_count)
 
 @app.route("/doctor")
 def doc():  

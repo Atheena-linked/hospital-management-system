@@ -3,4 +3,13 @@
 <h1>Admin dashboard</h1>
 <div>
     <a href = "{{url_for('add_doc')}}">add doc</a> </div>
+<h3>Total Doctors</h3>
+        
+        <h1 style>
+            {{ dcount }}
+        </h1>
+<h3>Total Patients</h3>
+        <h1>
+            {{ pcount }}
+        </h1>
 {% endblock content %}

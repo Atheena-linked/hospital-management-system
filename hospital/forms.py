@@ -5,6 +5,10 @@ from hospital.models import *
 
 class RegistrationForm(FlaskForm):
     name = StringField('Full Name', validators=[DataRequired(), Length(min=2, max=100)])
+    age = IntegerField('Age', validators=[DataRequired()])
+    gender = StringField('Gender', validators=[DataRequired(), Length(min=1, max=10)])
+    address = StringField('Address', validators=[DataRequired(), Length(min=5, max=150)])
+    contact_number = StringField('Contact Number', validators=[DataRequired(), Length(min=7, max=15)])
     username = StringField('Username',
                            validators=[DataRequired(),
                             Length(min=2,max=20)])
