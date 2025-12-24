@@ -1,1 +1,4 @@
 <h1>pat</h1>
+{% if current_user.is_authenticated %}
+<h1><a href ="{{ url_for('logout') }}">LOG OUTTT</a></h1>
+{% endif %}
