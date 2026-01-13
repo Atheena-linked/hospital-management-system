@@ -1,5 +1,39 @@
-<h1>pat</h1>
+
+<h1>Welcome {{ current_user.username }}!</h1>
 {% if current_user.is_authenticated %}
-<h2>Welcome, {{ current_user.username }}!</h2>
+
+
 <h1><a href ="{{ url_for('logout') }}">LOG OUTTT</a></h1>
+
 {% endif %}
+
+<h2>DEPARTMENTS</h2>
+<ul>
+    {% for dept in departments %}
+        <li><a href="{{ url_for('departments', dept_id=dept.id) }}">{{ dept.name }}</a></li>
+    {% endfor %}
+</ul>
+
+<h2>Your Appointments</h2>
+<table border="1">
+    <tr>
+        <th>Doctor</th>
+        <th>Department</th>
+        <th>Date & Time</th>
+        <th>Status</th>
+    </tr>
+    {% for appointment in appointments %}
+    <tr>
+        <td>Dr. {{ appointment.doctor.name }}</td>
+        <td>{{ appointment.department.name }}</td>
+        <td>{{ appointment.appointment_date.strftime('%Y-%m-%d %H:%M') }}</td>
+        <td>{{ appointment.status }}</td>
+
+        <td>
+            <form action ="{{ url_for('delete_appointment',appt_id=appointment.id)}}" method ="POST">
+                <BUTTON type = "submit" onclick="return confirm('Are you sure you want to cancel this appointment?');">Cancel</BUTTON>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>

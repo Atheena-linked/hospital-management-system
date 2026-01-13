@@ -50,4 +50,5 @@ class AddDoctorForm(FlaskForm):
             raise ValidationError('That username is taken ')
         
 # class BookAppointmentForm(FlaskForm):
+#     department = Select
     

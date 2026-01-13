@@ -50,6 +50,9 @@ class Appointment(db.Model):
     appointment_date = db.Column(db.DateTime,nullable=False)
     status = db.Column(db.String(20),default='Booked')
     treatment = db.relationship("Treatment",backref="appointment",uselist=False)
+    department = db.relationship('Department', backref='dept_appointments', lazy=True)
+    time_slot = db.Column(db.String(50), nullable=False)  # e.g., "08:00 - 12:00 am"
+    date = db.Column(db.Date, nullable=False)
 class Treatment(db.Model):
     __tablename__ = 'treatments'
     id = db.Column(db.Integer,primary_key=True)
@@ -62,6 +65,5 @@ class Availability(db.Model):
     __tablename__ = 'availabilities'
     id = db.Column(db.Integer, primary_key=True)
     doctor_id = db.Column(db.Integer, db.ForeignKey('doctors.id'), nullable=False)
-    start_time = db.Column(db.DateTime, nullable=False)
-    end_time = db.Column(db.DateTime, nullable=False)
-    is_booked = db.Column(db.Boolean, default=False, nullable=False)
+    time_slot = db.Column(db.String(50), nullable=False)  # e.g., "2024-07-01 10:00-11:00"
+    date = db.Column(db.Date, nullable=False)

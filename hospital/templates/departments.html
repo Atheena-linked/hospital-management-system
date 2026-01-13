@@ -1,0 +1,35 @@
+{% extends "base.html"%}
+{%block content%}
+
+<h1>{{ departments.name }}</h1>
+
+<h2>Doctors in {{ departments.name }}</h2>
+
+
+    {% for doctor in doctors %}
+        <!-- {% if doctor.department_id == departments.id %} -->
+
+        <h3>Dr. {{ doctor.name }}  <a href="{{ url_for('doctor_detail'  ,doc_id=doctor.id ) }}">View Details</a>  <a href="{{ url_for('availability',doctor_id=doctor.id) }}">+</a></h3>    
+        
+<!-- 
+{% else %}
+    <p>No doctors available in this department at the moment.</p> -->
+<!-- {% endif %} -->
+{% endfor %}
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

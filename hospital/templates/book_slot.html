@@ -1,0 +1,14 @@
+<table border="1" cellpadding="10" sstyle="border=collapse: collapse; text-align: center; width: 100%">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Morning Slot (08:00 - 12:00)</th>
+            <th>Evening Slot (16:00 - 21:00)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for data in dates %}
+        <tr>
+            <td><strong>{{ data.date }}</strong></td>
+        </tr>
+    </tbody>
