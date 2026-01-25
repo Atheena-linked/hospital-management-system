@@ -213,4 +213,21 @@ def delete_appointment(appt_id):
 @login_required
 def edit_profile_pat():
     patient=Patient.query.filter_by(user_id=current_user.id).first()
+    if request.method == 'POST':
+        patient.name = request.form.get('name')
+        patient.phone = request.form.get('phone')
+        patient.address = request.form.get('address')
+     
     
+        try:
+            db.session.commit()
+            flash('Profile updated successfully','success')
+            return redirect(url_for('pat'))
+        except :
+            db.session.rollback()
+            flash('Error updating profile')
+    return render_template('edit_profile_pat.html',patient=patient)
+
+
+
+
