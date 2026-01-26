@@ -78,17 +78,31 @@ def doc():
 
     
     if request.method == "POST":
+        action = request.form.get("action")
         appointment_id = request.form.get("appointment_id")
+
         appointment = Appointment.query.get(appointment_id)
-        appointment.status = "Completed"
-        
-        try:
-            db.session.commit()
-            flash('appointment status changed','success')
-            return redirect(url_for('doc'))
-        except:
-            db.session.rollback()
-            flash(f'Error updating status','danger')
+        if action == "complete":
+            appointment.status = "Completed"
+            
+            try:
+                db.session.commit()
+                flash('appointment status changed','success')
+                return redirect(url_for('doc'))
+            except:
+                db.session.rollback()
+                flash(f'Error updating status','danger')
+        if action == "cancel":
+            appointment_id = request.form.get("appointment_id")
+            appointment = Appointment.query.get(appointment_id)
+            try:
+                db.session.delete(appointment)
+                db.session.commit()
+                flash("cancelled appointment","success")
+                return redirect(url_for("doc"))
+            except:
+                db.rollback()
+                flash("unsuccessful","danger")
 
     doctor = Doctor.query.filter_by(user_id=current_user.id).first() 
     
