@@ -228,6 +228,30 @@ def edit_profile_pat():
             flash('Error updating profile')
     return render_template('edit_profile_pat.html',patient=patient)
 
+@app.route("/edit_password",methods = ['GET','POST'])
+@login_required
+def edit_password():
+    user = User.query.filter_by(id=current_user.id).first()
+    if request.method == 'POST':
+        user.username = request.form.get('username')
+        new_password = request.form.get('password')
+        user.password = bcrypt.generate_password_hash(new_password)
+        
+        try:
+            db.session.commit()
+            flash('updaated successfully')
+            return redirect(url_for('pat'))
+        except :
+            db.session.rollback()
+            flash('Error updating profile')
+    return render_template('edit_password.html',user=user)
+
+@app.route("/patient_history")
+@login_required
+def patient_history():
+    user = User.query.filter_by(id=current_user.id).first()
+    return render_template('patient_history.html',user=user)
+
 
 
 

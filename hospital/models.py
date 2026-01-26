@@ -12,7 +12,7 @@ class User(db.Model,UserMixin):
     username = db.Column(db.String(80),unique=True,nullable=False)
     password_hash= db.Column(db.String(120),nullable=False)
     role = db.Column(db.String(20),nullable=False)
-
+    patient = db.relationship('Patient', backref='user')
 class Doctor(db.Model):
     __tablename__ = 'doctors'
     id = db.Column(db.Integer,primary_key=True)

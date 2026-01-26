@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient History</title>
+</head>
+<body>
+
+    {% set p_obj = user.patient[0] if user.patient else none %}
+
+    <p>
+        <a href="/">Back to Dashboard</a>
+    </p>
+
+    <h1>Patient Medical History</h1>
+    <hr>
+
+    {% if p_obj %}
+        <h2>Patient Profile</h2>
+        <ul>
+            <li><strong>Name:</strong> {{ p_obj.name }}</li>
+            <li><strong>Age:</strong> {{ p_obj.age }}</li>
+            <li><strong>Gender:</strong> {{ p_obj.gender }}</li>
+            <li><strong>Contact:</strong> {{ p_obj.contact_number }}</li>
+            <li><strong>Address:</strong> {{ p_obj.address }}</li>
+        </ul>
+
+        <hr>
+
+        <h2>Appointment History</h2>
+
+        {% if p_obj.appointments %}
+            <table border="1" cellpadding="10" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Doctor</th>
+                        <th>Department</th>
+                        <th>Diagnosis & Notes</th>
+                        <th>Prescription</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appt in p_obj.appointments|reverse %}
+                    <tr>
+                        <td>{{ appt.date }}</td>
+                        <td>{{ appt.time_slot }}</td>
+                        
+                        <td>Dr. {{ appt.doctor.name }}</td>
+                        
+                        <td>{{ appt.doctor.department.name }}</td>
+
+                        <td>
+                            {% if appt.treatment %}
+                                <strong>Dx:</strong> {{ appt.treatment.diagnosis }} <br>
+                                <strong>Note:</strong> {{ appt.treatment.notes }}
+                            {% else %}
+                                <em>Pending Checkup</em>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if appt.treatment and appt.treatment.prescription %}
+                                {{ appt.treatment.prescription }}
+                            {% else %}
+                                --
+                            {% endif %}
+                        </td>
+
+                        <td>{{ appt.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No past appointments found.</p>
+        {% endif %}
+
+    {% else %}
+        <h3>Error: Profile Incomplete</h3>
+        <p>This user account is not linked to any patient data.</p>
+    {% endif %}
+
+</body>
+</html>
