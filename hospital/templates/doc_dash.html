@@ -1,2 +1,52 @@
+<h1>Welcome {{ doctor.name }}!</h1>
 
-<h2>Welcome </h2>
+<h1><a href ="{{ url_for('logout') }}">LOG OUTTT</a></h1>
+
+
+<h2>Upcoming Appointments</h2>
+
+    <table border="1" cellpadding="10" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Sr No.</th>
+                <th>Patient Name</th>
+                <th>Patient History</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appointment in doctor.appointments %}
+            <tr>
+                <td>{{ appointment.id }}.</td>
+
+                <td>{{ appointment.patient.name }}</td>
+
+                <td>
+                    <form action="{{ url_for('update_patient_history', appointment_id=appointment.id) }}" method="GET">
+                        <button type="submit">Update</button>
+                    </form>
+                </td>
+
+                <td>
+                    <!-- <table border="0" cellspacing="0" cellpadding="2">
+                        <tr>
+                            <td>
+                                <form action="/appointment/{{ appointment.id }}/complete" method="POST">
+                                    <button type="submit">Mark as Complete</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="/appointment/{{ appointment.id }}/cancel" method="POST">
+                                    <button type="submit">Cancel</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </table> -->
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

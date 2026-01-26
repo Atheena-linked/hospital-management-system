@@ -71,8 +71,11 @@ def admin():
     return render_template('admin_dash.html',dcount = d_count,pcount=p_count)
 
 @app.route("/doctor")
-def doc():  
-    return render_template('doc_dash.html')
+@login_required
+def doc(): 
+    doctor = Doctor.query.filter_by(user_id=current_user.id).first() 
+    print(f"Doctor: {doctor.name}, ID: {doctor.id}, Appointments count: {len(doctor.appointments)}")
+    return render_template('doc_dash.html',doctor=doctor)
 
 @app.route("/patient")
 def pat():  
@@ -239,7 +242,7 @@ def edit_password():
         
         try:
             db.session.commit()
-            flash('updaated successfully')
+            flash('updated successfully')
             return redirect(url_for('pat'))
         except :
             db.session.rollback()
@@ -253,5 +256,26 @@ def patient_history():
     return render_template('patient_history.html',user=user)
 
 
+@app.route("/update_patient_history/<int:appointment_id>",methods=["GET","POST"])
+@login_required
+def update_patient_history(appointment_id):
+    appointment = Appointment.query.get(appointment_id)
+    if request.method == 'POST':
+        treatment = appointment.treatment
 
+        if not treatment:
+            treatment = Treatment(appointment_id=appointment.id)
+            db.session.add(treatment)
+        
+        treatment.diagnosis = request.form.get("diagnosis")
+        treatment.prescription = request.form.get("prescription")
+        treatment.notes = request.form.get("notes")
 
+        try:
+            db.session.commit()
+            flash('Patient history updated successfully')
+            return redirect(url_for('doc'))
+        except:
+            db.session.rollback()
+            flash(f'Error updating profile')
+    return render_template('update_patient_history.html',appointment=appointment)
